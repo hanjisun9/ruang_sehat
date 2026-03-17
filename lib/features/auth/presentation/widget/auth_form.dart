@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:ruang_sehat/theme/app_colors.dart';
+import 'package:provider/provider.dart';
+import 'package:ruang_sehat/features/auth/providers/auth_providers.dart';
+import 'package:ruang_sehat/features/home/screens/home_screen.dart';
+import 'package:ruang_sehat/utils/snackbar_helper.dart';
 
 class AuthForm extends StatefulWidget {
   final bool isLogin;
@@ -22,6 +26,50 @@ class _AuthFormState extends State<AuthForm> {
   final TextEditingController passwordController = TextEditingController();
   bool _isObscure = true;
   bool _rememberMe = false;
+
+  Future<void> handleSubmit (BuildContext context) async {
+    final auth = context.read<AuthProviders>();
+    bool success;
+
+    if (widget.isLogin) {
+      success = await auth.login(
+        usernameController.text.trim(),
+        passwordController.text.trim(),
+      );
+    } else {
+      success = await auth.register(
+        nameController.text.trim(),
+        usernameController.text.trim(),
+        passwordController.text.trim(),
+      );
+    }
+
+    if (!context.mounted) return;
+
+    if (success) {
+      if (auth.successMessage != null) {
+       SnackbarHelper.show(context, message: auth.successMessage!);
+      }
+
+      if (widget.isLogin) {
+        Navigator.pushReplacementNamed(
+          context,
+          HomeScreen.routeName,
+          arguments: 0,
+        );
+      } else {
+        widget.onSwitchToLogin();
+      }
+    } else {
+      if(auth.errorMessage != null) {
+        SnackbarHelper.show(
+          context, 
+          message: auth.errorMessage!,
+          isError: true,
+        );
+      }
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -147,7 +195,7 @@ class _AuthFormState extends State<AuthForm> {
           Row(
             children: [
               Checkbox(
-                value: true,
+                value: _rememberMe,
                 onChanged: (value) {
                   setState(() {
                     _rememberMe = value ?? false;
@@ -195,7 +243,6 @@ class _AuthFormState extends State<AuthForm> {
               Expanded(child: Divider(thickness: 1, color: AppColors.border)),
             ],
           ),
-
           SizedBox(height: 18),
           Center(
             child: Container(

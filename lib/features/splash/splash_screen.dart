@@ -3,7 +3,7 @@ import 'package:ruang_sehat/theme/app_colors.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:ruang_sehat/features/auth/presentation/screens/auth_screen.dart';
 
-class SplashScreen extends StatefulWidget{
+class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
 
   static const String routeName = '/splash-screen';
@@ -12,8 +12,8 @@ class SplashScreen extends StatefulWidget{
   State<SplashScreen> createState() => _SplashScreenState();
 }
 
-class _SplashScreenState extends State<SplashScreen> 
-with TickerProviderStateMixin{
+class _SplashScreenState extends State<SplashScreen>
+    with TickerProviderStateMixin {
   late AnimationController _iconController;
   late AnimationController _textController;
 
@@ -21,31 +21,30 @@ with TickerProviderStateMixin{
   late Animation<double> _textAnimation;
 
   @override
-  void initState(){
+  void initState() {
     super.initState();
     _iconController = AnimationController(
       vsync: this,
       duration: const Duration(seconds: 2),
     );
-    
+
     _textController = AnimationController(
       vsync: this,
       duration: const Duration(milliseconds: 900),
     );
 
     _slideAnimation =
-       Tween<Offset>(
-         begin: const Offset(0, -10),
-         end:  const Offset(0, -0.5),
-      ).animate(
-        CurvedAnimation(parent: _iconController, curve: Curves.bounceOut),
-      );
+        Tween<Offset>(
+          begin: const Offset(0, -10),
+          end: const Offset(0, -0.5),
+        ).animate(
+          CurvedAnimation(parent: _iconController, curve: Curves.bounceOut),
+        );
 
     _textAnimation = Tween<double>(
       begin: 0,
       end: 1,
-      ).animate(CurvedAnimation(parent: _textController, curve: Curves.easeOut)
-      );
+    ).animate(CurvedAnimation(parent: _textController, curve: Curves.easeOut));
 
     _iconController.forward();
 
@@ -62,7 +61,6 @@ with TickerProviderStateMixin{
         });
       }
     });
-
   }
 
   @override
@@ -76,19 +74,20 @@ with TickerProviderStateMixin{
             children: [
               SlideTransition(
                 position: _slideAnimation,
-                child: SvgPicture.asset('assets/icons/logo.svg', width:  60)),
+                child: SvgPicture.asset('assets/icons/logo.svg', width: 60),
+              ),
 
-             AnimatedBuilder(
-              animation: _textAnimation,
-              builder: (context, child) {
-                return ClipRect(
-                  child: Align(
-                    alignment: Alignment.centerLeft,
-                    widthFactor: _textAnimation.value,
-                    child: child,
-                  ),
-                );
-              },
+              AnimatedBuilder(
+                animation: _textAnimation,
+                builder: (context, child) {
+                  return ClipRect(
+                    child: Align(
+                      alignment: Alignment.centerLeft,
+                      widthFactor: _textAnimation.value,
+                      child: child,
+                    ),
+                  );
+                },
                 child: const Text(
                   'Ruang Sehat',
                   textAlign: TextAlign.center,
@@ -98,10 +97,10 @@ with TickerProviderStateMixin{
                     fontWeight: FontWeight.bold,
                   ),
                 ),
-              )
+              ),
             ],
           ),
-        )
+        ),
       ),
     );
   }
