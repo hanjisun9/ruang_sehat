@@ -7,12 +7,16 @@ class SnackbarHelper {
     required String message,
     bool isError = false,
   }) {
+    ScaffoldMessenger.of(context).hideCurrentSnackBar();
+
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
         behavior: SnackBarBehavior.floating,
         backgroundColor: isError ? AppColors.error : AppColors.success,
-        shape: RoundedRectangleBorder(borderRadius:  BorderRadius.circular(20)),
-        duration: const Duration(seconds: 1),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(20),
+        ),
+        duration: const Duration(seconds: 2),
         padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
         content: Row(
           children: [
@@ -21,10 +25,15 @@ class SnackbarHelper {
               color: Colors.white,
             ),
             const SizedBox(width: 10),
-            Text(message, style: const TextStyle(color: Colors.white)),
+            Expanded(
+              child: Text(
+                message,
+                style: const TextStyle(color: Colors.white),
+              ),
+            ),
           ],
         ),
-      )
+      ),
     );
   }
 }

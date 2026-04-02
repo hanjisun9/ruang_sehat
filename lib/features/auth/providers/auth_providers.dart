@@ -1,5 +1,4 @@
 import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:ruang_sehat/features/auth/data/auth_services.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -19,22 +18,25 @@ class AuthProviders with ChangeNotifier {
     _successMessage = null;
     notifyListeners();
 
-    try{
+    try {
       final response = await AuthServices.register(name, username, password);
       final data = jsonDecode(response.body);
 
-      if (data['success'] == true) {
-        _successMessage = data ['message'] ?? 'Registrasi berhasil';
-        return true;
-      } else {
-        if (data['errors'] != null && data['errors'].length > 0) {
-          final firstError = data['errors'][0];
-          _errorMessage = firstError['message'];
-        } else {
-          _errorMessage = data['message'] ?? 'Terjadi kesalahan';
+      if (response.statusCode == 200 || response.statusCode == 201) {
+        if (data['success'] == true) {
+          _successMessage = data['message'] ?? 'Registrasi berhasil';
+          return true;
         }
-        return false;
       }
+
+      if (data['errors'] != null && data['errors'] is List && data['errors'].isNotEmpty) {
+        final firstError = data['errors'][0];
+        _errorMessage = firstError['message'] ?? data['message'] ?? 'Terjadi kesalahan';
+      } else {
+        _errorMessage = data['message'] ?? 'Registrasi gagal';
+      }
+
+      return false;
     } catch (error) {
       _errorMessage = 'Terjadi kesalahan koneksi';
       return false;
@@ -44,33 +46,38 @@ class AuthProviders with ChangeNotifier {
     }
   }
 
-  Future<bool> login (String username, String password) async {
+  Future<bool> login(String username, String password) async {
     _isLoading = true;
     _errorMessage = null;
     _successMessage = null;
     notifyListeners();
 
-    try{
-      final response = await AuthServices.login (username, password);
+    try {
+      final response = await AuthServices.login(username, password);
       final data = jsonDecode(response.body);
 
-      if(data['success'] == true) {
-        final token = data['data']['token'];
+      if (response.statusCode == 200) {
+        if (data['success'] == true) {
+          final token = data['data']?['token'];
 
-        final prefs = await SharedPreferences.getInstance();
-        await prefs.setString('token', token);
+          if (token != null) {
+            final prefs = await SharedPreferences.getInstance();
+            await prefs.setString('token', token);
+          }
 
-        _successMessage = data['message'] ?? 'Login berhasil';
-        return true;
-      } else {
-        if(data['errors'] != null && data ['errors'].length > 0) {
-          final firstError = data['errors'][0];
-          _errorMessage = firstError['message'];
-        } else {
-          _errorMessage = data['message'] ?? 'Terjadi kesalahan';
+          _successMessage = data['message'] ?? 'Login berhasil';
+          return true;
         }
-        return false;
       }
+
+      if (data['errors'] != null && data['errors'] is List && data['errors'].isNotEmpty) {
+        final firstError = data['errors'][0];
+        _errorMessage = firstError['message'] ?? data['message'] ?? 'Terjadi kesalahan';
+      } else {
+        _errorMessage = data['message'] ?? 'Login gagal';
+      }
+
+      return false;
     } catch (error) {
       _errorMessage = 'Terjadi kesalahan koneksi';
       return false;
