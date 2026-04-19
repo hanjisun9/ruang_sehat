@@ -6,6 +6,7 @@ import 'package:provider/provider.dart';
 import 'package:ruang_sehat/features/auth/providers/auth_providers.dart';
 import 'package:ruang_sehat/features/home/screens/home_screen.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:ruang_sehat/widgets/bottom_navbar.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -32,6 +33,7 @@ class MyApp extends StatelessWidget {
         SplashScreen.routeName: (context) => const SplashScreen(),
         AuthScreen.routeName: (context) => const AuthScreen(),
         HomeScreen.routeName: (context) => const HomeScreen(),
+        BottomNavbar.routeName: (context) => const BottomNavbar(),
       },
     );
   }
