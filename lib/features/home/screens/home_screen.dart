@@ -7,6 +7,7 @@ import 'package:ruang_sehat/theme/app_colors.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
+
   static const String routeName = '/home';
 
   @override
@@ -45,10 +46,14 @@ class _HomeScreenState extends State<HomeScreen> {
               crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Text('Hi, Na Jaemin',
-                    style: TextStyle(fontSize: 20, fontWeight: FontWeight.w600)),
-                Text('How are you feeling today ?',
-                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500)),
+                Text(
+                  'Hi, Na Jaemin',
+                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.w600),
+                ),
+                Text(
+                  'How are you feeling today ?',
+                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
+                ),
               ],
             ),
             const Spacer(),
@@ -80,16 +85,75 @@ class _HomeScreenState extends State<HomeScreen> {
         child: Column(
           children: const [
             Padding(
-              padding: EdgeInsets.only(left: 24, bottom: 16, top: 8),
+              padding: EdgeInsets.fromLTRB(24, 8, 24, 16),
+              child: _FeaturedHeader(),
+            ),
+            Padding(
+              padding: EdgeInsets.only(left: 24, bottom: 16),
               child: FeaturedCard(),
+            ),
+            Padding(
+              padding: EdgeInsets.symmetric(horizontal: 24),
+              child: _RecommendHeader(),
             ),
             Padding(
               padding: EdgeInsets.symmetric(horizontal: 24),
               child: RecommendCard(),
             ),
+            SizedBox(height: 24),
           ],
         ),
       ),
+    );
+  }
+}
+
+class _FeaturedHeader extends StatelessWidget {
+  const _FeaturedHeader();
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: const [
+        Text(
+          'Featured',
+          style: TextStyle(fontSize: 20, fontWeight: FontWeight.w600),
+        ),
+        Text(
+          'See More >',
+          style: TextStyle(
+            fontSize: 16,
+            color: AppColors.hintText,
+            fontWeight: FontWeight.w600,
+          ),
+        )
+      ],
+    );
+  }
+}
+
+class _RecommendHeader extends StatelessWidget {
+  const _RecommendHeader();
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: const [
+        Text(
+          'Recomended for you',
+          style: TextStyle(fontSize: 20, fontWeight: FontWeight.w600),
+        ),
+        Text(
+          'See More >',
+          style: TextStyle(
+            fontSize: 16,
+            color: AppColors.hintText,
+            fontWeight: FontWeight.w500,
+          ),
+        )
+      ],
     );
   }
 }

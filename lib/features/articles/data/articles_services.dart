@@ -36,7 +36,7 @@ class ArticlesServices {
       throw Exception('Format response tidak valid');
     }
 
-    if (decoded['success'] != true){
+    if (decoded['succes'] != true){
       if (decoded['errors'] != null &&
           decoded['errors'] is List &&
           decoded['errors'].isNotEmpty) {
