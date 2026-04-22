@@ -25,7 +25,7 @@ class ArticlesProvider with ChangeNotifier {
     _resetMessage();
 
     try {
-      final result = await ArticlesServices.getArticles();
+      final result = await ArticleServices.getArticles();
 
       _articles = result;
 
@@ -45,7 +45,7 @@ class ArticlesProvider with ChangeNotifier {
     _resetMessage();
 
     try {
-      final result = await ArticlesServices.getMyArticles();
+      final result = await ArticleServices.getMyArticles();
 
       _myArticles = result;
 
@@ -65,7 +65,7 @@ class ArticlesProvider with ChangeNotifier {
     _resetMessage();
 
     try {
-      final result = await ArticlesServices.getDetailArticle(id);
+      final result = await ArticleServices.getDetailArticle(id);
 
       _detailArticle = result;
     } catch (e) {

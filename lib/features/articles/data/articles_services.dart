@@ -6,9 +6,9 @@ import 'package:http/http.dart' as http;
 
 import 'package:ruang_sehat/features/articles/data/articles_model.dart';
 
-class ArticlesServices {
+class ArticleServices {
   static final String baseUrl = dotenv.env['BASE_URL']!;
-  static final String articleBaseUrl = '$baseUrl/articles';
+  static final String articleBaseUrl = '$baseUrl/article';
 
   static Future<dynamic> _getRequest(String endpoint) async{
     final prefs = await SharedPreferences.getInstance();
@@ -36,7 +36,7 @@ class ArticlesServices {
       throw Exception('Format response tidak valid');
     }
 
-    if (decoded['succes'] != true){
+    if (decoded['success'] != true){
       if (decoded['errors'] != null &&
           decoded['errors'] is List &&
           decoded['errors'].isNotEmpty) {
