@@ -7,13 +7,19 @@ import 'package:ruang_sehat/features/auth/providers/auth_providers.dart';
 import 'package:ruang_sehat/features/home/screens/home_screen.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:ruang_sehat/widgets/bottom_navbar.dart';
+import 'package:ruang_sehat/features/articles/providers/articles_provider.dart';
+import 'package:ruang_sehat/features/articles/presentation/screens/detail_screen.dart';
+import 'package:ruang_sehat/features/articles/presentation/screens/form_article_screen.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await dotenv.load(fileName: '.env');
   runApp(
     MultiProvider(
-      providers: [ChangeNotifierProvider(create: (_) => AuthProviders())],
+      providers: [
+        ChangeNotifierProvider(create: (_) => AuthProviders()),
+        ChangeNotifierProvider(create: (_) => ArticlesProvider()),
+      ],
       child: const MyApp(),
     ),
   );
@@ -34,6 +40,8 @@ class MyApp extends StatelessWidget {
         AuthScreen.routeName: (context) => const AuthScreen(),
         HomeScreen.routeName: (context) => const HomeScreen(),
         BottomNavbar.routeName: (context) => const BottomNavbar(),
+        DetailScreen.routeName: (context) => const DetailScreen(),
+        FormArticleScreen.routeName: (context) => const FormArticleScreen(),
       },
     );
   }

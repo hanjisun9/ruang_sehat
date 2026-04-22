@@ -3,8 +3,10 @@ import 'package:ruang_sehat/features/home/screens/home_screen.dart';
 import 'package:ruang_sehat/features/articles/presentation/screens/my_article_screen.dart';
 import 'package:ruang_sehat/theme/app_colors.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
+import 'package:provider/provider.dart';
+import 'package:ruang_sehat/features/articles/providers/articles_provider.dart';
 
-class BottomNavbar extends StatefulWidget{
+class BottomNavbar extends StatefulWidget {
   const BottomNavbar({super.key});
 
   static const routeName = '/bottom-navbar';
@@ -12,10 +14,20 @@ class BottomNavbar extends StatefulWidget{
   State<BottomNavbar> createState() => _BottomNavbarState();
 }
 
-class _BottomNavbarState extends State<BottomNavbar>{
+class _BottomNavbarState extends State<BottomNavbar> {
   int _selectedIndex = 0;
   bool _isFirstLoaf = true;
   List<Widget> get _pages => [HomeScreen(), MyArticleScreen()];
+
+  @override
+  void intiState() {
+    super.initState();
+    Future.microtask(() {
+      final articleProvider = context.read<ArticlesProvider>();
+      articleProvider.getArticles();
+      articleProvider.getMyArticles();
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -33,15 +45,12 @@ class _BottomNavbarState extends State<BottomNavbar>{
           });
         },
         items: [
-          BottomNavigationBarItem(
-            icon: Icon(LucideIcons.house),
-            label: 'Home'
-          ),
+          BottomNavigationBarItem(icon: Icon(LucideIcons.house), label: 'Home'),
           BottomNavigationBarItem(
             icon: Icon(LucideIcons.newspaper),
-            label: 'My Articles'
-          )
-        ]
+            label: 'My Articles',
+          ),
+        ],
       ),
     );
   }
