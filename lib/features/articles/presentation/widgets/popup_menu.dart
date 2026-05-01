@@ -1,9 +1,16 @@
 import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:ruang_sehat/features/articles/presentation/screens/form_article_screen.dart';
+import 'package:ruang_sehat/widgets/modal_bottom_sheet.dart';
+import 'package:provider/provider.dart';
+import 'package:ruang_sehat/features/articles/providers/articles_provider.dart';
+import 'package:ruang_sehat/utils/snackbar_helper.dart';
+import 'package:ruang_sehat/widgets/bottom_navbar.dart';
 
 class PopupMenu extends StatelessWidget {
-  const PopupMenu({super.key});
+  final String articleId;
+
+  const PopupMenu({super.key, required this.articleId});
 
   @override
   Widget build(BuildContext context) {
@@ -27,7 +34,7 @@ class PopupMenu extends StatelessWidget {
                   Navigator.pushNamed(
                     context,
                     FormArticleScreen.routeName,
-                    arguments: {'isEdit': true},
+                    arguments: {'isEdit': true, 'articleId': articleId}
                   );
                 },
               ),
@@ -37,6 +44,41 @@ class PopupMenu extends StatelessWidget {
                   'Delete Article',
                   style: TextStyle(color: Colors.red),
                 ),
+                onTap: () {
+                  ModalBottomSheet.show(
+                    context: context,
+                    label: 'Are you sure you want to delete article?',
+                    isLogout: false,
+                    onConfirm: () async {
+                      final articleProvider = context.read<ArticlesProvider>();
+                      final navigator = Navigator.of(context);
+
+                      navigator.pop();
+
+                      await articleProvider.deleteArticle(articleId);
+
+                      if (articleProvider.errorMessage == null) {
+                        SnackbarHelper.show(
+                          navigator.context,
+                          message: articleProvider.successMessage ?? 'Success',
+                          isError: false,
+                        );
+
+                        navigator.pushNamedAndRemoveUntil(
+                          BottomNavbar.routeName,
+                          (route) => false,
+                          arguments: 1,
+                        );
+                      } else {
+                        SnackbarHelper.show(
+                          navigator.context,
+                          message: articleProvider.errorMessage ?? 'error',
+                          isError: true,
+                        );
+                      }
+                    },
+                  );
+                },
               ),
             ],
           ),

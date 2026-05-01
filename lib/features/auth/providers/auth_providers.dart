@@ -1,16 +1,20 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
+import 'package:http/http.dart';
 import 'package:ruang_sehat/features/auth/data/auth_services.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:ruang_sehat/features/auth/data/user_model.dart';
 
 class AuthProviders with ChangeNotifier {
   bool _isLoading = false;
   String? _errorMessage;
   String? _successMessage;
+  UserModel? _profile;  
 
   bool get isLoading => _isLoading;
   String? get errorMessage => _errorMessage;
   String? get successMessage => _successMessage;
+  UserModel? get profile => _profile;
 
   Future<bool> register(String name, String username, String password) async {
     _isLoading = true;
@@ -65,6 +69,8 @@ class AuthProviders with ChangeNotifier {
             await prefs.setString('token', token);
           }
 
+          await getProfile();
+
           _successMessage = data['message'] ?? 'Login berhasil';
           return true;
         }
@@ -85,5 +91,50 @@ class AuthProviders with ChangeNotifier {
       _isLoading = false;
       notifyListeners();
     }
+  }
+
+  Future<void> logout() async {
+    final prefs = await SharedPreferences.getInstance();
+
+    final token = prefs.getString('token');
+
+    if(token == null) {
+      _errorMessage = 'Token tidak ditemukan';
+      notifyListeners();
+      return;
+    }
+
+    final response = await AuthServices.logout();
+
+    final data = jsonDecode(response.body);
+
+    if(response.statusCode == 200) {
+      await prefs.remove('token');
+      _successMessage = data['message'] ?? 'Logout berhasil';
+    } else {
+      _errorMessage = data['message'] ?? 'Terjadi kesalahan';
+    }
+
+    notifyListeners();
+  }
+  Future<void> getProfile() async {
+    final prefs = await SharedPreferences.getInstance();
+    final token = prefs.getString('token');
+
+    if (token == null) {
+      _errorMessage = 'Token tidak ditemukan';
+      notifyListeners();
+      return;
+    }
+    
+    try {
+      final result = await AuthServices.getProfile();
+      _profile = result;
+      _successMessage = 'Profile berhasil diambil';
+    } catch (e) {
+      _errorMessage = e.toString();
+    }
+
+    notifyListeners();
   }
 }

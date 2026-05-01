@@ -13,7 +13,7 @@ import 'package:ruang_sehat/features/articles/presentation/screens/form_article_
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await dotenv.load(fileName: '.env');
+  await dotenv.load(fileName: 'assets/.env');
   runApp(
     MultiProvider(
       providers: [

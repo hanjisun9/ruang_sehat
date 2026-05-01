@@ -6,8 +6,35 @@ import 'package:provider/provider.dart';
 import 'package:ruang_sehat/features/articles/providers/articles_provider.dart';
 import 'package:ruang_sehat/features/articles/presentation/screens/form_article_screen.dart';
 
-class MyArticleScreen extends StatelessWidget {
+class MyArticleScreen extends StatefulWidget {
   const MyArticleScreen({super.key});
+
+  @override
+  State<MyArticleScreen> createState() => _MyArticleScreenState();
+}
+
+class _MyArticleScreenState extends State<MyArticleScreen> {
+  @override
+  void initState() {
+    super.initState();
+
+    // fetch ketika halaman dibuka
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      context.read<ArticlesProvider>().getMyArticles();
+    });
+  }
+
+  Future<void> _goToCreateArticle() async {
+    await Navigator.pushNamed(
+      context,
+      FormArticleScreen.routeName,
+      arguments: {'isEdit': false},
+    );
+
+    // refresh lagi setelah balik dari form (biar langsung muncul)
+    if (!mounted) return;
+    await context.read<ArticlesProvider>().getMyArticles();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -15,7 +42,7 @@ class MyArticleScreen extends StatelessWidget {
       backgroundColor: AppColors.background,
       body: SafeArea(
         child: Padding(
-          padding: EdgeInsets.symmetric(vertical: 16, horizontal: 24),
+          padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 24),
           child: SingleChildScrollView(
             child: Column(
               children: [
@@ -43,24 +70,18 @@ class MyArticleScreen extends StatelessWidget {
                     ),
                   ],
                 ),
-                SizedBox(height: 16),
-                MyArticlesCard(),
+                const SizedBox(height: 16),
+                const MyArticlesCard(),
               ],
             ),
           ),
         ),
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          Navigator.pushNamed(
-            context,
-            FormArticleScreen.routeName,
-            arguments: {'isEdit': false},
-          );
-        },
+        onPressed: _goToCreateArticle,
         backgroundColor: AppColors.primary,
-        shape: CircleBorder(),
-        child: Icon(LucideIcons.plus, color: Colors.white, size: 30),
+        shape: const CircleBorder(),
+        child: const Icon(LucideIcons.plus, color: Colors.white, size: 30),
       ),
     );
   }

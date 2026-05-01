@@ -21,18 +21,20 @@ class _DetailScreenState extends State<DetailScreen> {
   bool isMe = false;
 
   @override
-  void initState() {
-    super.initState();
+void initState() {
+  super.initState();
 
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      final args = ModalRoute.of(context)!.settings.arguments as Map;
-      final isMe = args['isMe'] ?? false;
-      final id = args['id'];
+  WidgetsBinding.instance.addPostFrameCallback((_) {
+    final args = ModalRoute.of(context)!.settings.arguments as Map;
+    final id = args['id'] as String;
 
-      context.read<ArticlesProvider>().getDetailArticle(id);
+    setState(() {
+      isMe = args['isMe'] == true; 
     });
-  }
 
+    context.read<ArticlesProvider>().getDetailArticle(id);
+  });
+}
   @override
   Widget build(BuildContext context) {
     final provider = context.watch<ArticlesProvider>();
@@ -141,7 +143,11 @@ class _DetailScreenState extends State<DetailScreen> {
                   child: Container(color: Colors.transparent),
                 ),
               ),
-              Positioned(top: 80, right: 20, child: PopupMenu()),
+              Positioned(
+                top: 80,
+                right: 20,
+                child: PopupMenu(articleId: article.id),
+              ),
             ],
           ],
         ),

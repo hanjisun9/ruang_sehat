@@ -19,15 +19,15 @@ class FeaturedCard extends StatelessWidget {
             return const Center(child: CircularProgressIndicator());
           }
 
-          if (provider.articles.isEmpty) {
+          if (provider.featuredArticles.isEmpty) {
             return const Center(child: Text('Tidak ada artikel'));
           }
           return ListView.separated(
             scrollDirection: Axis.horizontal,
-            itemCount: provider.articles.length,
+            itemCount: provider.featuredArticles.length,
             separatorBuilder: (_, __) => const SizedBox(width: 8),
             itemBuilder: (context, index) {
-              final article = provider.articles[index];
+              final article = provider.featuredArticles[index];
               return GestureDetector(
                 onTap: () {
                   Navigator.pushNamed(
@@ -119,15 +119,18 @@ class FeaturedCard extends StatelessWidget {
                                       ),
                                     ],
                                   ),
-                                  Text(
-                                    article.title,
-                                    style: TextStyle(
-                                      color: Colors.black,
-                                      fontSize: 14,
-                                      fontWeight: FontWeight.w500,
+                                  Align(
+                                    alignment: AlignmentGeometry.centerLeft,
+                                    child: Text(
+                                      article.title,
+                                      style: TextStyle(
+                                        color: Colors.black,
+                                        fontSize: 14,
+                                        fontWeight: FontWeight.w500,
+                                      ),
+                                      maxLines: 2,
+                                      overflow: TextOverflow.ellipsis,
                                     ),
-                                    maxLines: 2,
-                                    overflow: TextOverflow.ellipsis,
                                   ),
                                 ],
                               ),
