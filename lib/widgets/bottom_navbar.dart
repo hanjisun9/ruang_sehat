@@ -6,11 +6,13 @@ import 'package:lucide_icons_flutter/lucide_icons.dart';
 import 'package:provider/provider.dart';
 import 'package:ruang_sehat/features/articles/providers/articles_provider.dart';
 import 'package:ruang_sehat/features/auth/providers/auth_providers.dart';
+import 'package:ruang_sehat/features/auth/presentation/screens/update_profile_screen.dart';
 
 class BottomNavbar extends StatefulWidget {
   const BottomNavbar({super.key});
 
   static const routeName = '/bottom-navbar';
+
   @override
   State<BottomNavbar> createState() => _BottomNavbarState();
 }
@@ -18,10 +20,15 @@ class BottomNavbar extends StatefulWidget {
 class _BottomNavbarState extends State<BottomNavbar> {
   int _selectedIndex = 0;
   bool _isFirstLoad = true;
-  List<Widget> get _pages => [HomeScreen(), MyArticleScreen()];
+
+  List<Widget> get _pages => const [
+        HomeScreen(),
+        MyArticleScreen(),
+        UpdateProfileScreen(),
+      ];
 
   @override
-  void intiState() {
+  void initState() { 
     super.initState();
     Future.microtask(() {
       final articleProvider = context.read<ArticlesProvider>();
@@ -32,14 +39,14 @@ class _BottomNavbarState extends State<BottomNavbar> {
     });
   }
 
-  @override 
-  void didChangeDependencies(){
+  @override
+  void didChangeDependencies() {
     super.didChangeDependencies();
 
-    if(_isFirstLoad) {
+    if (_isFirstLoad) {
       final args = ModalRoute.of(context)?.settings.arguments;
-      if(args != null && args is int) {
-        _selectedIndex= args;
+      if (args != null && args is int) {
+        _selectedIndex = args;
       }
       _isFirstLoad = false;
     }
@@ -60,12 +67,10 @@ class _BottomNavbarState extends State<BottomNavbar> {
             _selectedIndex = index;
           });
         },
-        items: [
+        items: const [
           BottomNavigationBarItem(icon: Icon(LucideIcons.house), label: 'Home'),
-          BottomNavigationBarItem(
-            icon: Icon(LucideIcons.newspaper),
-            label: 'My Articles',
-          ),
+          BottomNavigationBarItem(icon: Icon(LucideIcons.newspaper), label: 'My Articles'),
+          BottomNavigationBarItem(icon: Icon(LucideIcons.user), label: 'Profile'),
         ],
       ),
     );

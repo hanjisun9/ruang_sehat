@@ -18,7 +18,6 @@ class _MyArticleScreenState extends State<MyArticleScreen> {
   void initState() {
     super.initState();
 
-    // fetch ketika halaman dibuka
     WidgetsBinding.instance.addPostFrameCallback((_) {
       context.read<ArticlesProvider>().getMyArticles();
     });
@@ -31,7 +30,6 @@ class _MyArticleScreenState extends State<MyArticleScreen> {
       arguments: {'isEdit': false},
     );
 
-    // refresh lagi setelah balik dari form (biar langsung muncul)
     if (!mounted) return;
     await context.read<ArticlesProvider>().getMyArticles();
   }

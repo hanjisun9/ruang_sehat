@@ -137,4 +137,50 @@ class AuthProviders with ChangeNotifier {
 
     notifyListeners();
   }
+
+  Future<bool> updateProfile({
+  String? name,
+  String? username,
+  String? password,
+}) async {
+  _isLoading = true;
+  _errorMessage = null;
+  _successMessage = null;
+  notifyListeners();
+
+  try {
+    final response = await AuthServices.updateProfile(
+      name: name,
+      username: username,
+      password: password,
+    );
+
+    final data = jsonDecode(response.body);
+
+    if (response.statusCode == 200) {
+      if (data['success'] == true) {
+        _successMessage = data['message'] ?? 'Profile berhasil diupdate';
+
+        // refresh profile supaya hint langsung update
+        await getProfile();
+        return true;
+      }
+    }
+
+    if (data['errors'] != null && data['errors'] is List && data['errors'].isNotEmpty) {
+      final firstError = data['errors'][0];
+      _errorMessage = firstError['message'] ?? data['message'] ?? 'Terjadi kesalahan';
+    } else {
+      _errorMessage = data['message'] ?? 'Gagal update profile';
+    }
+
+    return false;
+  } catch (e) {
+    _errorMessage = 'Terjadi kesalahan koneksi';
+    return false;
+  } finally {
+    _isLoading = false;
+    notifyListeners();
+  }
+}
 }

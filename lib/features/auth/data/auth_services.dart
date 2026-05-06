@@ -81,4 +81,29 @@ class AuthServices {
       throw Exception('Gagal mengambil profil');
     }
   }
+
+  static Future<http.Response> updateProfile({
+  String? name,
+  String? username,
+  String? password,
+}) async {
+  final url = Uri.parse('$authBaseUrl/profile');
+
+  final prefs = await SharedPreferences.getInstance();
+  final token = prefs.getString('token');
+
+  final Map<String, dynamic> body = {};
+  if (name != null && name.trim().isNotEmpty) body['name'] = name.trim();
+  if (username != null && username.trim().isNotEmpty) body['username'] = username.trim();
+  if (password != null && password.isNotEmpty) body['password'] = password;
+
+  return await http.put(
+    url,
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': 'Bearer $token',
+    },
+    body: jsonEncode(body),
+  );
+}
 }
