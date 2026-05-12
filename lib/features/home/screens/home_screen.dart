@@ -125,17 +125,7 @@ class _HomeScreenState extends State<HomeScreen> {
           ],
         ),
       ),
-      body: NotificationListener<ScrollNotification>(
-        onNotification:  (ScrollNotification scrollInfo) {
-          if (scrollInfo.metrics.pixels >= scrollInfo.metrics.maxScrollExtent - 200) {
-            final provider = context.read<ArticlesProvider>();
-
-            if (!provider.isFetchingMore && provider.hasNextPage) {
-              provider.getArticles(isRefresh: false);
-            }
-          }
-          return true;
-        },
+      
         child: SingleChildScrollView(
           child: Column(
             children: const [

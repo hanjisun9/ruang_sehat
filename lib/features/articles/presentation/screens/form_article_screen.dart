@@ -57,7 +57,7 @@ class _FormArticleScreenState extends State<FormArticleScreen> {
       await provider.updateArticle(
         articleId,
         title: titleController.text,
-        descripition: descriptionController.text,
+        description: descriptionController.text,
         category: categoryController.text,
         imagePath: imagePath,
       );
@@ -66,7 +66,7 @@ class _FormArticleScreenState extends State<FormArticleScreen> {
         titleController.text,
         descriptionController.text,
         categoryController.text,
-        imagePath!
+        imagePath!,
       );
     }
 
@@ -76,14 +76,14 @@ class _FormArticleScreenState extends State<FormArticleScreen> {
       SnackbarHelper.show(
         context,
         message: provider.successMessage ?? 'Success',
-        isError: false
+        isError: false,
       );
       Navigator.pop(context);
     } else {
       SnackbarHelper.show(
-        context, 
+        context,
         message: provider.errorMessage ?? 'error',
-        isError: true
+        isError: true,
       );
     }
   }

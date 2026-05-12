@@ -117,6 +117,7 @@ class AuthProviders with ChangeNotifier {
 
     notifyListeners();
   }
+  
   Future<void> getProfile() async {
     final prefs = await SharedPreferences.getInstance();
     final token = prefs.getString('token');
@@ -160,8 +161,6 @@ class AuthProviders with ChangeNotifier {
     if (response.statusCode == 200) {
       if (data['success'] == true) {
         _successMessage = data['message'] ?? 'Profile berhasil diupdate';
-
-        // refresh profile supaya hint langsung update
         await getProfile();
         return true;
       }

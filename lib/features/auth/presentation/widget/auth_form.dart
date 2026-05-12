@@ -37,34 +37,30 @@ class _AuthFormState extends State<AuthForm> {
     super.dispose();
   }
 
-  // Validasi wajib isi + rules sederhana (pakai snackbar, bukan error text field)
   String? _validateInputs() {
     final name = nameController.text.trim();
     final username = usernameController.text.trim();
     final password = passwordController.text.trim();
 
-    // Register: name wajib
     if (!widget.isLogin && name.isEmpty) return 'Name wajib diisi';
 
-    // Login/Register: username & password wajib
     if (username.isEmpty) return 'Username wajib diisi';
     if (password.isEmpty) return 'Password wajib diisi';
 
-    // Optional: minimal password 6 karakter (kalau mau seperti ini)
     if (password.length < 6) return 'Password minimal 6 karakter';
 
     return null;
   }
 
   Future<void> handleSubmit(BuildContext context) async {
-    // 1) Validasi dulu (tampil snackbar merah)
+    
     final validationMsg = _validateInputs();
     if (validationMsg != null) {
       SnackbarHelper.show(context, message: validationMsg, isError: true);
       return;
     }
 
-    // 2) Hit API
+    
     final auth = context.read<AuthProviders>();
     bool success;
 
@@ -83,7 +79,7 @@ class _AuthFormState extends State<AuthForm> {
 
     if (!context.mounted) return;
 
-    // 3) Tampilkan snackbar + navigasi
+    
     if (success) {
       SnackbarHelper.show(
         context,
@@ -97,7 +93,7 @@ class _AuthFormState extends State<AuthForm> {
           arguments: 0,
         );
       } else {
-        // setelah register sukses -> pindah ke login
+        
         widget.onSwitchToLogin();
 
         nameController.clear();

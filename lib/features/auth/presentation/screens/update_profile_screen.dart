@@ -91,7 +91,7 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
                 clipBehavior: Clip.none,
                 children: [
                   Container(
-                    height: 190,
+                    height: 160,
                     width: double.infinity,
                     decoration: const BoxDecoration(
                       color: AppColors.primary,
@@ -101,11 +101,11 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
                       ),
                     ),
                     child: const Padding(
-                      padding: EdgeInsets.only(top: 18),
+                      padding: EdgeInsets.only(top: 55),
                       child: Align(
                         alignment: Alignment.topCenter,
                         child: Text(
-                          'Edit Profil',
+                          'Edit Profile',
                           style: TextStyle(
                             color: AppColors.secondary,
                             fontSize: 18,
@@ -241,7 +241,7 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
                         onPressed: auth.isLoading ? null : _submit,
                         style: ElevatedButton.styleFrom(
                           backgroundColor: AppColors.primary,
-                          foregroundColor: AppColors.secondary, // warna teks/icon
+                          foregroundColor: AppColors.secondary, 
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(14),
                           ),
@@ -264,7 +264,6 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
                               ),
                       ),
                     ),
-
                     const SizedBox(height: 28),
                   ],
                 ),
